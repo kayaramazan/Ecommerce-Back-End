@@ -55,11 +55,10 @@ router.get('/', function(req, res, next) {
 
 // GET SINGLE PRODUCT
 
-router.get('/:prodId',function(req,res){
-  console.log(req.param) 
+router.get('/:prodId',function(req,res){ 
   let prodId = req.params.prodId
   database.query('select * from products where id='+prodId+'' ).then(result=>{
-    if(result.length > 0)
+    if(result)
     {
       res.status(200).json({
         product:result[0]
@@ -70,6 +69,23 @@ router.get('/:prodId',function(req,res){
     }
   }).catch(err => console.log(err))
    
+})
+// fetchb by categori name 
+router.get('/category/:catName', function (req,res) {
+   
+  let catName = req.params.catName;
+  database.query('select * from products p inner join categories c on p.cat_id = c.id where c.title ="'+catName+'"').then(result=>{
+    if(result.length>0)
+    {
+      res.status(200).json({
+        products:result
+      })
+    }
+    else{
+      res.json({ message:`No products found ${catName} category`})
+    }
+  }).catch(err => console.log(err))
+
 })
 module.exports = router;
  
