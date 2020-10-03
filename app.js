@@ -5,16 +5,17 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const cors = require('cors');
 var app = express();
-
-
+  
 // import routes
 var productRouter = require('./routes/product');
 var usersRouter = require('./routes/users');
+var ordersRouter = require('./routes/orders');
 
 
 // U se Routes 
 app.use('/api/products', productRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/orders', ordersRouter);
 
 
 // view engine setup
@@ -35,7 +36,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
- 
+
+app.use('/', productRouter);
+app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
